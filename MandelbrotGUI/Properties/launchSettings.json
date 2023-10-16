@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MandelbrotGUI": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

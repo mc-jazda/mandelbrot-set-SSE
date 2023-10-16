@@ -1,0 +1,2 @@
+LIBRARY MandelbrotMASM
+EXPORTS HelloMASM
