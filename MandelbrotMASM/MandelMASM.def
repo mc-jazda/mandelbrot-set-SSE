@@ -1,2 +1,2 @@
 LIBRARY MandelbrotMASM
-EXPORTS HelloMASM
+EXPORTS generateMandelMASM

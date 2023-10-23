@@ -1,6 +1,12 @@
 .code
-HelloMASM proc
-mov RAX, 50
+
+generateMandelMASM proc ; int resX, int resY, int rowNum, int iterCount, byte[] bmp
+add RCX, RDX
+add RCX, R8
+add RCX, R9
+add RCX, [RSP+40]
+mov RAX, RCX
 ret
-HelloMASM endp
+generateMandelMASM endp
+
 end
