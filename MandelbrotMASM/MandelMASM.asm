@@ -1,6 +1,6 @@
 .code
 
-generateMandelMASM proc ; int resX, int resY, int rowNum, int iterCount, byte[] bmp
+generateMandelMASM proc ; byte[] bmp, int resX, int resY, int rowNum, int iterCount
 add RCX, RDX
 add RCX, R8
 add RCX, R9

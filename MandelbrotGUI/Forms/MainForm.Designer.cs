@@ -43,7 +43,7 @@ namespace MandelbrotGUI
             settingResY = new NumericUpDown();
             labelResX = new Label();
             labelResY = new Label();
-            buttonGenerate = new Button();
+            buttonConfirm = new Button();
             pictureBoxBmp = new PictureBox();
             groupDll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)settingResX).BeginInit();
@@ -195,16 +195,16 @@ namespace MandelbrotGUI
             labelResY.TabIndex = 7;
             labelResY.Text = "Wysokość bitmapy";
             // 
-            // buttonGenerate
+            // buttonConfirm
             // 
-            buttonGenerate.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
-            buttonGenerate.Location = new Point(32, 488);
-            buttonGenerate.Name = "buttonGenerate";
-            buttonGenerate.Size = new Size(136, 53);
-            buttonGenerate.TabIndex = 6;
-            buttonGenerate.Text = "Generuj";
-            buttonGenerate.UseVisualStyleBackColor = true;
-            buttonGenerate.Click += buttonGenerate_Click;
+            buttonConfirm.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
+            buttonConfirm.Location = new Point(32, 488);
+            buttonConfirm.Name = "buttonConfirm";
+            buttonConfirm.Size = new Size(136, 53);
+            buttonConfirm.TabIndex = 6;
+            buttonConfirm.Text = "Zatwierdź";
+            buttonConfirm.UseVisualStyleBackColor = true;
+            buttonConfirm.Click += buttonConfirm_Click;
             // 
             // pictureBoxBmp
             // 
@@ -218,9 +218,9 @@ namespace MandelbrotGUI
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1018, 603);
+            ClientSize = new Size(1382, 753);
             Controls.Add(pictureBoxBmp);
-            Controls.Add(buttonGenerate);
+            Controls.Add(buttonConfirm);
             Controls.Add(groupSettings);
             Controls.Add(groupDll);
             Controls.Add(labelTitle);
@@ -254,7 +254,7 @@ namespace MandelbrotGUI
         private Label labelIterNum;
         private NumericUpDown settingThreadCount;
         private NumericUpDown settingIterationCount;
-        private Button buttonGenerate;
+        private Button buttonConfirm;
         private PictureBox pictureBoxBmp;
     }
 }

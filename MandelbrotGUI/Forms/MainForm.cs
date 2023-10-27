@@ -1,6 +1,5 @@
 using MandelbrotGUI.Functions;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace MandelbrotGUI
 {
@@ -31,7 +30,7 @@ namespace MandelbrotGUI
 
         }
 
-        private void buttonGenerate_Click(object sender, EventArgs e)
+        private void buttonConfirm_Click(object sender, EventArgs e)
         {
             DLLFunction function;
             int resX, resY, iterationCount, threadCount;
@@ -59,25 +58,8 @@ namespace MandelbrotGUI
             // Bitmap creation will be moved to other function, now is present only for testing
             // 
 
-            Bitmap bitmap = new(resX, resY, PixelFormat.Format24bppRgb);
-            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, resX, resY),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-
-            IntPtr bitmapPtr = bitmapData.Scan0;
-
-            int bmpBytesCount = Math.Abs(bitmapData.Stride) * bitmap.Height;
-            byte[] bitmapBytes = new byte[bmpBytesCount];
-
-            Marshal.Copy(bitmapPtr, bitmapBytes, 0, bmpBytesCount);
-
-            Utility.testBitmapProcessing(bitmapBytes, resX, resY);
-
-            Marshal.Copy(bitmapBytes, 0, bitmapPtr, bmpBytesCount);
-
-            bitmap.UnlockBits(bitmapData);
+            Bitmap bitmap = Utility.initMandel(settings);
             pictureBoxBmp.Image = bitmap;
-
-            Utility.initMandel(settings);
         }
     }
 }
