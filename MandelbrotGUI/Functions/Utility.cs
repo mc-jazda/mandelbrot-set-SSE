@@ -36,12 +36,11 @@ namespace MandelbrotGUI.Functions
 
             
             int linesPerThread = (int)(settings.resY / settings.threadCount);
-
-            // Ustawienie wybranej funckcji do generowania
+            Thread[] threads = new Thread[settings.threadCount];
 
             for (int  i = 0; i < settings.threadCount; i++)
             {
-                Thread thread = new Thread(() =>
+                threads[i] = new Thread(() =>
                 {
                     for (int j = 0; j < linesPerThread; j++)
                     {
@@ -51,7 +50,9 @@ namespace MandelbrotGUI.Functions
                         testThreads(System.Environment.CurrentManagedThreadId, j);
                     }
                 });
-
+            }
+            foreach (Thread thread in threads)
+            {
                 thread.Start();
             }
 
