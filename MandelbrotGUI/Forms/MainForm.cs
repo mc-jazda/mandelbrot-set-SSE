@@ -1,4 +1,4 @@
-using MandelbrotGUI.Functions;
+using MandelbrotGUI.Utility;
 using System.Drawing;
 
 namespace MandelbrotGUI
@@ -53,12 +53,7 @@ namespace MandelbrotGUI
 
             MandelSettings settings = new MandelSettings(resX, resY, iterationCount, threadCount, function);
 
-
-            //
-            // Bitmap creation will be moved to other function, now is present only for testing
-            // 
-
-            Bitmap bitmap = Utility.initMandel(settings);
+            Bitmap bitmap = Utility.Utility.initMandel(settings);
             pictureBoxBmp.Image = bitmap;
         }
     }

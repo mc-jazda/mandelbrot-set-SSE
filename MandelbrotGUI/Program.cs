@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using MandelbrotGUI.Functions;
+using MandelbrotGUI.Utility;
 
 namespace MandelbrotGUI
 {

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
-namespace MandelbrotGUI.Functions
+namespace MandelbrotGUI.Utility
 {
     static public class Utility
     {
@@ -42,7 +42,7 @@ namespace MandelbrotGUI.Functions
 
             for (int  i = 0; i < settings.threadCount; i++)
             {
-                int threadNum = i; // Local value of i - necessary because lambda expresions captures variable, not value
+                int threadNum = i; // Necessary because lambda expresion captures variable not value
 
                 threads[i] = new Thread(() => initThread(bitmapBytes, linesPerThread,
                     threadNum, bytesPerRow, settings.resX, settings.resY, settings.iterationCount));
@@ -51,7 +51,11 @@ namespace MandelbrotGUI.Functions
             {
                 thread.Start();
             }
-
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+            
             Marshal.Copy(bitmapBytes, 0, bitmapPtr, bmpBytesCount);
             bitmap.UnlockBits(bitmapData);
 
@@ -60,12 +64,13 @@ namespace MandelbrotGUI.Functions
 
         static private void initThread(byte[] bitmapBytes, int linesPerThread, int threadNum, int bytesPerRow,
             int resX, int resY, int iterationCount)
-        {
+        { 
             for (int j = 0; j < linesPerThread; j++)
             {
+                Console.WriteLine($"{System.Environment.CurrentManagedThreadId}");
                 int rowOffset = (threadNum * linesPerThread + j) * bytesPerRow;
                 byte[] bitmapRow = new byte[bytesPerRow];
-                //Console.WriteLine($"i: {threadNum}, j: {j}");
+
                 Array.Copy(bitmapBytes, rowOffset, bitmapRow, 0, bytesPerRow);
 
                 generateMandelMASM(bitmapRow, resX, resY,
@@ -74,7 +79,7 @@ namespace MandelbrotGUI.Functions
                 Array.Copy(bitmapRow, 0, bitmapBytes, rowOffset, bytesPerRow);
             }
         }
-        // Methods solely for testing, will delete later
+        // Method solely for testing, will delete later
         static private void testThreads(int id, int count)
         {
             for (int i = 0; i < 10; i++)
@@ -82,24 +87,7 @@ namespace MandelbrotGUI.Functions
                 Console.WriteLine($"{id}_{count}: {i}");
             }
         }
-        static public void testBitmapProcessing(byte[] bitmap, int resX, int resY)
-        {
-            for(int i = 0; i < bitmap.Length; i++) 
-            { 
-                if (i % 3 == 0)
-                {
-                    //Blue
-                    bitmap[i] = 255;
-                    //Green
-                    bitmap[i + 1] = 255;
-                    //Red
-                    bitmap[i + 2] = 0;
-                }
-            }
-        }
     }
-
-    
 
     public enum DLLFunction
     {
