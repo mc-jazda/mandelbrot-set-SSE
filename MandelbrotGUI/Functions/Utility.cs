@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MandelbrotGUI.Properties;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -26,13 +27,14 @@ namespace MandelbrotGUI.Functions
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
 
             IntPtr bitmapPtr = bitmapData.Scan0;
-            int bmpBytesCount = Math.Abs(bitmapData.Stride) * bitmap.Height;
+            int bytesPerRow = Math.Abs(bitmapData.Stride);
+            int bmpBytesCount = bytesPerRow * bitmap.Height;
             byte[] bitmapBytes = new byte[bmpBytesCount];
 
             Marshal.Copy(bitmapPtr, bitmapBytes, 0, bmpBytesCount);
 
             // ...
-            testBitmapProcessing(bitmapBytes, settings.resX, settings.resY);
+            //testBitmapProcessing(bitmapBytes, settings.resX, settings.resY);
 
             
             int linesPerThread = (int)(settings.resY / settings.threadCount);
@@ -40,16 +42,10 @@ namespace MandelbrotGUI.Functions
 
             for (int  i = 0; i < settings.threadCount; i++)
             {
-                threads[i] = new Thread(() =>
-                {
-                    for (int j = 0; j < linesPerThread; j++)
-                    {
-                        //generateMandelMASM(bitmapBytes, settings.resX, settings.resY,
-                        //    i * linesPerThread + j, settings.iterationCount);
+                int threadNum = i; // Local value of i - necessary because lambda expresions captures variable, not value
 
-                        testThreads(System.Environment.CurrentManagedThreadId, j);
-                    }
-                });
+                threads[i] = new Thread(() => initThread(bitmapBytes, linesPerThread,
+                    threadNum, bytesPerRow, settings.resX, settings.resY, settings.iterationCount));
             }
             foreach (Thread thread in threads)
             {
@@ -62,6 +58,22 @@ namespace MandelbrotGUI.Functions
             return bitmap;
         }
 
+        static private void initThread(byte[] bitmapBytes, int linesPerThread, int threadNum, int bytesPerRow,
+            int resX, int resY, int iterationCount)
+        {
+            for (int j = 0; j < linesPerThread; j++)
+            {
+                int rowOffset = (threadNum * linesPerThread + j) * bytesPerRow;
+                byte[] bitmapRow = new byte[bytesPerRow];
+                //Console.WriteLine($"i: {threadNum}, j: {j}");
+                Array.Copy(bitmapBytes, rowOffset, bitmapRow, 0, bytesPerRow);
+
+                generateMandelMASM(bitmapRow, resX, resY,
+                    threadNum * linesPerThread + j, iterationCount);
+
+                Array.Copy(bitmapRow, 0, bitmapBytes, rowOffset, bytesPerRow);
+            }
+        }
         // Methods solely for testing, will delete later
         static private void testThreads(int id, int count)
         {
