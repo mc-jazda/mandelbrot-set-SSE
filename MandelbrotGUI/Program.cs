@@ -1,7 +1,3 @@
-using System;
-using System.Runtime.InteropServices;
-using MandelbrotGUI.Utility;
-
 namespace MandelbrotGUI
 {
     internal static class Program

@@ -1,5 +1,4 @@
 using MandelbrotGUI.Utility;
-using System.Drawing;
 
 namespace MandelbrotGUI
 {

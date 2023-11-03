@@ -15,9 +15,12 @@ namespace MandelbrotGUI.Utility
         private const string masmDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Debug\MandelbrotMASM.dll";
 
         [DllImport(cppDllPath)]
-        private static extern int generateMandelCpp(byte[] bmp, int resX, int resY, int rowNum, int iterCount);
+        private static extern int generateMandelCpp(
+            byte[] bmp, int resX, int resY, int rowNum, int iterCount);
+
         [DllImport(masmDllPath)]
-        private static extern int generateMandelMASM(byte[] bmp, int resX, int resY, int rowNum, int iterCount);
+        private static extern int generateMandelMASM(
+            byte[] bmp, int resX, int resY, int rowNum, int iterCount);
 
         static public Bitmap initMandel(MandelSettings settings)
         {
@@ -32,11 +35,8 @@ namespace MandelbrotGUI.Utility
             byte[] bitmapBytes = new byte[bmpBytesCount];
 
             Marshal.Copy(bitmapPtr, bitmapBytes, 0, bmpBytesCount);
-
-            // ...
-            //testBitmapProcessing(bitmapBytes, settings.resX, settings.resY);
-
-            
+        
+            // Threads initialization
             int linesPerThread = (int)(settings.resY / settings.threadCount);
             Thread[] threads = new Thread[settings.threadCount];
 
@@ -67,7 +67,6 @@ namespace MandelbrotGUI.Utility
         { 
             for (int j = 0; j < linesPerThread; j++)
             {
-                Console.WriteLine($"{System.Environment.CurrentManagedThreadId}");
                 int rowOffset = (threadNum * linesPerThread + j) * bytesPerRow;
                 byte[] bitmapRow = new byte[bytesPerRow];
 
@@ -79,6 +78,7 @@ namespace MandelbrotGUI.Utility
                 Array.Copy(bitmapRow, 0, bitmapBytes, rowOffset, bytesPerRow);
             }
         }
+
         // Method solely for testing, will delete later
         static private void testThreads(int id, int count)
         {
