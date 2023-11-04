@@ -100,7 +100,6 @@ namespace MandelbrotGUI
             // 
             // settingResX
             // 
-            settingResX.Increment = new decimal(new int[] { 2, 0, 0, 0 });
             settingResX.Location = new Point(189, 33);
             settingResX.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
             settingResX.Minimum = new decimal(new int[] { 300, 0, 0, 0 });
@@ -138,14 +137,13 @@ namespace MandelbrotGUI
             // 
             // settingThreadCount
             // 
-            settingThreadCount.Increment = new decimal(new int[] { 2, 0, 0, 0 });
             settingThreadCount.Location = new Point(189, 132);
             settingThreadCount.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-            settingThreadCount.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
+            settingThreadCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             settingThreadCount.Name = "settingThreadCount";
             settingThreadCount.Size = new Size(90, 27);
             settingThreadCount.TabIndex = 9;
-            settingThreadCount.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            settingThreadCount.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // settingIterationCount
             // 
@@ -167,7 +165,6 @@ namespace MandelbrotGUI
             // 
             // settingResY
             // 
-            settingResY.Increment = new decimal(new int[] { 2, 0, 0, 0 });
             settingResY.Location = new Point(189, 66);
             settingResY.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
             settingResY.Minimum = new decimal(new int[] { 300, 0, 0, 0 });

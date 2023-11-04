@@ -1,9 +1,25 @@
 .code
+                          ; RCX, RDX, R8, R9, stack
+generateMandelMASM proc ; byte* bmp, int rowCount, int rowNum, int resX, int resY, int iterCount
+    LOCAL alignment: DWORD
+    LOCAL bytesPerRow: DWORD
+    
+    push rdx 
+    mov rsi, rcx ; RSI = bmp*
 
-generateMandelMASM proc ; byte[] bmp, int resX, int resY, int rowNum, int iterCount
-    mov rsi, rcx ; byte[] = RSI
-    mov r10, 120
-
+    ; calculating bitmap alignment
+    mov eax, 3
+    mul r9d
+    mov bytesPerRow, eax
+    xor edx, edx
+    mov r10d, 4
+    div r10d
+    mov alignment, edx
+    
+    pop r11; R11 = rowCount
+   
+    mov r10b, 120 
+    mov rdx, r9 ; RDX = resX
     mov rax, 3
     mul rdx
     xor rcx, rcx
