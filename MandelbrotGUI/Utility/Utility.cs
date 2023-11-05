@@ -15,15 +15,28 @@ namespace MandelbrotGUI.Utility
         private const string masmDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Debug\MandelbrotMASM.dll";
 
         [DllImport(cppDllPath)]
-        private static extern int generateMandelCpp(
+        private static extern void generateMandelCpp(
             byte[] bmp, int rowCount, int rowNum, int resX, int resY, int iterCount);
 
         [DllImport(masmDllPath)]
-        private static extern int generateMandelMASM(
+        private static extern void generateMandelMASM(
             byte[] bmp, int rowCount, int rowNum, int resX, int resY, int iterCount);
 
+        private delegate void GenerateMandelDelegate(
+                byte[] bmp, int rowCount, int rowNum, int resX, int resY, int iterCount);
         static public Bitmap initMandel(MandelSettings settings)
         {
+            // Setting function to generate Mandelbrot set
+            GenerateMandelDelegate generateMandel;
+            switch(settings.function)
+            {
+                default: 
+                case DLLFunction.MASM:
+                    generateMandel = generateMandelMASM; break;
+                case DLLFunction.Cpp:
+                    generateMandel = generateMandelCpp; break;
+            }
+
             // Bitmap initialization
             Bitmap bitmap = new(settings.resX, settings.resY, PixelFormat.Format24bppRgb);
             BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, settings.resX, settings.resY),
@@ -69,7 +82,7 @@ namespace MandelbrotGUI.Utility
             {
                 int localIter = i; // Necessary so that lambda captures by value, not by reference
 
-                threads[i] = new Thread(() => generateMandelMASM(bitmapRows[localIter], rowsPerThread[localIter],
+                threads[i] = new Thread(() => generateMandel(bitmapRows[localIter], rowsPerThread[localIter],
                     rowOffset[localIter], settings.resX, settings.resY, settings.iterationCount));
             }
             foreach (Thread thread in threads)
@@ -105,7 +118,7 @@ namespace MandelbrotGUI.Utility
         public int resY { get; init; }
         public int iterationCount { get; init; }
         public int threadCount { get; init; }
-        DLLFunction function { get; init; }
+        public DLLFunction function { get; init; }
 
         public MandelSettings(int _resX, int _resY, int _iterationCount, 
             int _threadCount, DLLFunction _function)
