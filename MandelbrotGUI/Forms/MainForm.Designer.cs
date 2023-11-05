@@ -148,6 +148,7 @@ namespace MandelbrotGUI
             // settingIterationCount
             // 
             settingIterationCount.Location = new Point(189, 99);
+            settingIterationCount.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             settingIterationCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             settingIterationCount.Name = "settingIterationCount";
             settingIterationCount.Size = new Size(90, 27);
