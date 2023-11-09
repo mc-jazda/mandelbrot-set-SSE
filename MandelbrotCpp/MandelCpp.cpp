@@ -1,52 +1,51 @@
 #include "pch.h"
 #include "MandelCpp.h"
+#include "cmath"
 
-void generateMandelCpp(BYTE* bmp, int rowCount, int rowNum, int resX, int resY, int iterCount)
+void generateMandelCpp(BYTE* bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount)
 {
-    int alignment = (resX * 3) % 4;
+    // Defining part of complex plane to generate
+    const double xStart = -2.2;
+    const double xEnd = 0.8;
+    const double yStart = -1.0;
+    const double yEnd = 1.0;
+
+    const double xScale = abs(xEnd - xStart) / resX;
+    const double yScale = abs(yEnd - yStart) / resY;
 
     for (int y = 0; y < rowCount; y++)
     {
+        const double cIm = (rowNum + y) * yScale + yStart;
+
         for (int x = 0; x < resX; x++)
         {
-            // Calculate the complex coordinates for the current pixel
-            double real = 3.5 * (static_cast<double>(x) / resX) - 2.5;
-            double imag = 2.0 * (static_cast<double>(rowNum + y) / resY) - 1.0;
+            const double cRe = x * xScale + xStart;
+            double zRe = 0, zIm = 0;    // z0 = 0
 
-            double zReal = real;
-            double zImag = imag;
+            bool isInSet = true;
 
-            int n = 0;
-            while (n < iterCount)
+            for (int i = 0; i < iterCount; i++)
             {
-                double zReal2 = zReal * zReal;
-                double zImag2 = zImag * zImag;
+                double z2Re = zRe * zRe - zIm * zIm + cRe;
+                double z2Im = 2 * zRe * zIm + cIm;
 
-                if (zReal2 + zImag2 > 4.0)
+                if (z2Re * z2Re + z2Im * z2Im >= 4)
+                {
+                    isInSet = false;
                     break;
+                }
 
-                zImag = 2 * zReal * zImag + imag;
-                zReal = zReal2 - zImag2 + real;
-
-                n++;
+                zRe = z2Re;
+                zIm = z2Im;
             }
 
-            // Set the pixel color to black if inside the set; otherwise, set it to white
-            BYTE color = (n == iterCount) ? 255 : 0;
+            BYTE color = isInSet ? 255 : 0;
 
-            *bmp = color;
-            bmp++;
-            *bmp = color;
-            bmp++;
-            *bmp = color;
-            bmp++;
+            *bmp = color; bmp++;
+            *bmp = color; bmp++;
+            *bmp = color; bmp++;
         }
 
-        // Padding to ensure 4-byte alignment
-        for (int p = 0; p < alignment; p++)
-        {
-            *bmp = 0;
-            bmp++;
-        }
+        bmp += alignment;
     }
 }

@@ -1,8 +1,10 @@
 ﻿using MandelbrotGUI.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -16,14 +18,14 @@ namespace MandelbrotGUI.Utility
 
         [DllImport(cppDllPath)]
         private static extern void generateMandelCpp(
-            byte[] bmp, int rowCount, int rowNum, int resX, int resY, int iterCount);
+            byte[] bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount);
 
         [DllImport(masmDllPath)]
         private static extern void generateMandelMASM(
-            byte[] bmp, int rowCount, int rowNum, int resX, int resY, int iterCount);
+            byte[] bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount);
 
         private delegate void GenerateMandelDelegate(
-                byte[] bmp, int rowCount, int rowNum, int resX, int resY, int iterCount);
+                byte[] bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount);
         static public Bitmap initMandel(MandelSettings settings)
         {
             // Setting function to generate Mandelbrot set
@@ -46,6 +48,8 @@ namespace MandelbrotGUI.Utility
             int bytesPerRow = Math.Abs(bitmapData.Stride);
             int bmpBytesCount = bytesPerRow * bitmap.Height;
             byte[] bitmapBytes = new byte[bmpBytesCount];
+
+            int alignment = bytesPerRow - settings.resX*3;
 
             Marshal.Copy(bitmapPtr, bitmapBytes, 0, bmpBytesCount);
 
@@ -83,8 +87,10 @@ namespace MandelbrotGUI.Utility
                 int localIter = i; // Necessary so that lambda captures by value, not by reference
 
                 threads[i] = new Thread(() => generateMandel(bitmapRows[localIter], rowsPerThread[localIter],
-                    rowOffset[localIter], settings.resX, settings.resY, settings.iterationCount));
+                    rowOffset[localIter], settings.resX, settings.resY, alignment, settings.iterationCount));
             }
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
             foreach (Thread thread in threads)
             {
                 thread.Start();
@@ -93,6 +99,8 @@ namespace MandelbrotGUI.Utility
             {
                 thread.Join();
             }
+            stopwatch.Stop();
+            Console.WriteLine($"Time: {stopwatch.ElapsedMilliseconds} ms");
 
             for(int i = 0; i < settings.threadCount; i++)
             {

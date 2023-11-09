@@ -6,4 +6,4 @@
 #define MANDELCPP_API __declspec(dllimport)
 #endif
 
-extern "C" MANDELCPP_API void generateMandelCpp(BYTE * bmp, int rowCount, int rowNum, int resX, int resY, int iterCount);
+extern "C" MANDELCPP_API void generateMandelCpp(BYTE * bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount);
