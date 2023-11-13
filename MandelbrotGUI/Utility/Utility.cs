@@ -22,7 +22,8 @@ namespace MandelbrotGUI.Utility
 
         [DllImport(masmDllPath)]
         private static extern void generateMandelMASM(
-            byte[] bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount);
+            byte[] bmp, int rowCount, int rowNum, int resX,
+            int resY, int alignment, int iterCount);
 
         private delegate void GenerateMandelDelegate(
                 byte[] bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount);
@@ -84,7 +85,7 @@ namespace MandelbrotGUI.Utility
 
             for (int i = 0; i < settings.threadCount; i++)
             {
-                int localIter = i; // Necessary so that lambda captures by value, not by reference
+                int localIter = i; // Necessary because lambda captures reference, not value
 
                 threads[i] = new Thread(() => generateMandel(bitmapRows[localIter], rowsPerThread[localIter],
                     rowOffset[localIter], settings.resX, settings.resY, alignment, settings.iterationCount));
