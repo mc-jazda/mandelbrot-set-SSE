@@ -45,6 +45,7 @@ namespace MandelbrotGUI
             labelResY = new Label();
             buttonConfirm = new Button();
             pictureBoxBmp = new PictureBox();
+            separator = new Label();
             groupDll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)settingResX).BeginInit();
             groupSettings.SuspendLayout();
@@ -57,12 +58,12 @@ namespace MandelbrotGUI
             // labelTitle
             // 
             labelTitle.AutoSize = true;
-            labelTitle.Font = new Font("Segoe UI Black", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            labelTitle.Location = new Point(146, 32);
+            labelTitle.Font = new Font("Segoe UI Black", 20F, FontStyle.Bold, GraphicsUnit.Point);
+            labelTitle.Location = new Point(32, 20);
             labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(706, 54);
+            labelTitle.Size = new Size(337, 46);
             labelTitle.TabIndex = 0;
-            labelTitle.Text = "Generowanie fraktala Mandelbrota";
+            labelTitle.Text = "Zbiór Mandelbrota";
             labelTitle.Click += label1_Click;
             // 
             // radioBtnMASM
@@ -100,10 +101,9 @@ namespace MandelbrotGUI
             // 
             // settingResX
             // 
-            settingResX.Increment = new decimal(new int[] { 2, 0, 0, 0 });
             settingResX.Location = new Point(189, 33);
             settingResX.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
-            settingResX.Minimum = new decimal(new int[] { 300, 0, 0, 0 });
+            settingResX.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             settingResX.Name = "settingResX";
             settingResX.Size = new Size(90, 27);
             settingResX.TabIndex = 4;
@@ -138,18 +138,18 @@ namespace MandelbrotGUI
             // 
             // settingThreadCount
             // 
-            settingThreadCount.Increment = new decimal(new int[] { 2, 0, 0, 0 });
             settingThreadCount.Location = new Point(189, 132);
             settingThreadCount.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-            settingThreadCount.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
+            settingThreadCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             settingThreadCount.Name = "settingThreadCount";
             settingThreadCount.Size = new Size(90, 27);
             settingThreadCount.TabIndex = 9;
-            settingThreadCount.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            settingThreadCount.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // settingIterationCount
             // 
             settingIterationCount.Location = new Point(189, 99);
+            settingIterationCount.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             settingIterationCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             settingIterationCount.Name = "settingIterationCount";
             settingIterationCount.Size = new Size(90, 27);
@@ -167,10 +167,9 @@ namespace MandelbrotGUI
             // 
             // settingResY
             // 
-            settingResY.Increment = new decimal(new int[] { 2, 0, 0, 0 });
             settingResY.Location = new Point(189, 66);
             settingResY.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
-            settingResY.Minimum = new decimal(new int[] { 300, 0, 0, 0 });
+            settingResY.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             settingResY.Name = "settingResY";
             settingResY.Size = new Size(90, 27);
             settingResY.TabIndex = 6;
@@ -198,7 +197,7 @@ namespace MandelbrotGUI
             // buttonConfirm
             // 
             buttonConfirm.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
-            buttonConfirm.Location = new Point(32, 488);
+            buttonConfirm.Location = new Point(32, 459);
             buttonConfirm.Name = "buttonConfirm";
             buttonConfirm.Size = new Size(136, 53);
             buttonConfirm.TabIndex = 6;
@@ -208,17 +207,26 @@ namespace MandelbrotGUI
             // 
             // pictureBoxBmp
             // 
-            pictureBoxBmp.Location = new Point(418, 115);
+            pictureBoxBmp.Location = new Point(445, 40);
             pictureBoxBmp.Name = "pictureBoxBmp";
-            pictureBoxBmp.Size = new Size(574, 451);
+            pictureBoxBmp.Size = new Size(2000, 1000);
             pictureBoxBmp.TabIndex = 7;
             pictureBoxBmp.TabStop = false;
+            // 
+            // separator
+            // 
+            separator.BackColor = Color.Black;
+            separator.Location = new Point(397, 20);
+            separator.Name = "separator";
+            separator.Size = new Size(1, 940);
+            separator.TabIndex = 8;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1382, 753);
+            ClientSize = new Size(1382, 1048);
+            Controls.Add(separator);
             Controls.Add(pictureBoxBmp);
             Controls.Add(buttonConfirm);
             Controls.Add(groupSettings);
@@ -256,5 +264,6 @@ namespace MandelbrotGUI
         private NumericUpDown settingIterationCount;
         private Button buttonConfirm;
         private PictureBox pictureBoxBmp;
+        private Label separator;
     }
 }

@@ -44,11 +44,6 @@ namespace MandelbrotGUI
             resY = (int)settingResY.Value;
             iterationCount = (int)settingIterationCount.Value;
             threadCount = (int)settingThreadCount.Value;
-            if (resY % threadCount != 0)
-            {
-                MessageBox.Show("Wysokoœæ bitmapy" +
-                " musi byæ podzielna przez liczbê w¹tków"); return;
-            }
 
             MandelSettings settings = new MandelSettings(resX, resY, iterationCount, threadCount, function);
 
