@@ -209,7 +209,7 @@ namespace MandelbrotGUI
             // 
             pictureBoxBmp.Location = new Point(445, 40);
             pictureBoxBmp.Name = "pictureBoxBmp";
-            pictureBoxBmp.Size = new Size(2000, 900);
+            pictureBoxBmp.Size = new Size(2000, 1000);
             pictureBoxBmp.TabIndex = 7;
             pictureBoxBmp.TabStop = false;
             // 
@@ -225,7 +225,7 @@ namespace MandelbrotGUI
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1382, 1033);
+            ClientSize = new Size(1382, 1048);
             Controls.Add(separator);
             Controls.Add(pictureBoxBmp);
             Controls.Add(buttonConfirm);

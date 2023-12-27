@@ -13,6 +13,8 @@ namespace MandelbrotGUI.Utility
 {
     static public class Utility
     {
+        // Need to change to /release path
+        // and turn on optimization in cpp and masm dlls
         private const string cppDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Debug\MandelbrotCpp.dll";
         private const string masmDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Debug\MandelbrotMASM.dll";
 
@@ -103,7 +105,7 @@ namespace MandelbrotGUI.Utility
             stopwatch.Stop();
             Console.WriteLine($"Time: {stopwatch.ElapsedMilliseconds} ms");
 
-            for(int i = 0; i < settings.threadCount; i++)
+            for (int i = 0; i < settings.threadCount; i++)
             {
                 Array.Copy(bitmapRows[i], 0, bitmapBytes,
                     rowOffset[i] * bytesPerRow, rowsPerThread[i] * bytesPerRow);
