@@ -10,20 +10,24 @@ void generateMandelCpp(BYTE* bmp, int rowCount, int rowNum, int resX, int resY, 
     const double yStart = -1.0;
     const double yEnd = 1.0;
 
+    // Calculating scale factors
     const double xScale = abs(xEnd - xStart) / resX;
     const double yScale = abs(yEnd - yStart) / resY;
 
     for (int y = 0; y < rowCount; y++)
-    {
-        const double cIm = (rowNum + y) * yScale + yStart;
+    {   
+        // Z(n) = Z(n-1)^2 + C
+        const double cIm = (rowNum + y) * yScale + yStart;  // Im(C) - constant per row
 
         for (int x = 0; x < resX; x++)
         {
             const double cRe = x * xScale + xStart;
-            double zRe = 0, zIm = 0;    // z0 = 0
+            double zRe = 0, zIm = 0;    // Z(0) = 0
 
-            bool isInSet = true;
+            bool isInSet = true;    // Checks if current C is part of Mandelbrot Set
 
+            // Calculates next values of Z(n) 
+            // And cheks if |Z(n)| < 2, then C is part of Mandlebrot Set
             for (int i = 0; i < iterCount; i++)
             {
                 double z2Re = zRe * zRe - zIm * zIm + cRe;
@@ -39,6 +43,7 @@ void generateMandelCpp(BYTE* bmp, int rowCount, int rowNum, int resX, int resY, 
                 zIm = z2Im;
             }
 
+            // Sets BGR chanels of bitmap to either black or white
             BYTE color = isInSet ? 255 : 0;
 
             *bmp = color; bmp++;
