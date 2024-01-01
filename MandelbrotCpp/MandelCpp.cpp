@@ -22,7 +22,7 @@ void generateMandelCpp(BYTE* bmp, int rowCount, int rowNum, int resX, int resY, 
         for (int x = 0; x < resX; x++)
         {
             const double cRe = x * xScale + xStart;
-            double zRe = 0, zIm = 0;    // Z(0) = 0
+            double zRe = cRe, zIm = cIm;    // Re(Z1) = Re(C), Im(Z1) = Im(C)
 
             bool isInSet = true;    // Checks if current C is part of Mandelbrot Set
 
