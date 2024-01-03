@@ -11,6 +11,7 @@
     columnMask DWORD 0, 1, 2, 3, 4, 5, 6, 7
     TWO REAL4 2.0
     FOUR REAL4 4.0
+    WHITE DWORD 255                     ; RGB white
 
 .code
 
@@ -119,12 +120,29 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
             vbroadcastss ymm5, dword ptr [FOUR] ; broadcasts 4 to ymm5
             vcmpleps ymm5, ymm4, ymm5           ; |Zn|^2 <= 4
 
+            vbroadcastss ymm4, dword ptr [WHITE] ; broadcast ymm4 with RGB white
+            vandps ymm5, ymm5, ymm4             ; ymm5 contains either black or white RGB value
+
+            ;--------- Coding bitmap pixels ---------
+            xor rcx, rcx                        ; current pixel - iterator
+
+            LOOP_PIXELS:
+                vmovd edx, xmm5
+                vpsrldq ymm5, ymm5, 4
+                mov byte ptr [rsi], dl
+                mov byte ptr [rsi+1], dl
+                mov byte ptr [rsi+2], dl
+                add rsi, 3
+
+                inc ecx
+                cmp ecx, 8
+                jl LOOP_PIXELS
 
             add r11d, 8
             cmp r11d, r9d
             jl LOOP_COLUMNS
 
-
+        add rsi, alignment
         inc r10d
         cmp r10d, rowCount
         jl LOOP_ROWS
