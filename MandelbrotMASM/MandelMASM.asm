@@ -9,6 +9,8 @@
     y_end REAL4 1.0
     absMask DWORD 07FFFFFFFh            ; mask setting only sign bit to 0 - positive number
     columnMask DWORD 0, 1, 2, 3, 4, 5, 6, 7
+    TWO REAL4 2.0
+    FOUR REAL4 4.0
 
 .code
 
@@ -61,28 +63,61 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
     vbroadcastss ymm9, dword ptr [y_start]  ; broadcasting y_start to ymm9
     vbroadcastss ymm10, dword ptr [x_start] ; broadcasting x_start to ymm10
     vmovdqu ymm11, ymmword ptr [columnMask] ; load 0, 1, 2, 3, 4, 5, 6, 7 to ymm11 - needed for calculating Re(C)
-    vcvtdq2ps ymm11, ymm11                  ; convert DWORD to REAL4
+    vcvtdq2ps ymm11, ymm11              ; convert DWORD to REAL4
 
 
     LOOP_ROWS:
         ;--------- Calculating Im(C) --------- 
-        movd xmm2, r10d                     ; moving current Y as scalar to xmm2
-        vbroadcastss ymm2, xmm2             ; broadcasting Y to ymm2
-        vcvtdq2ps ymm2, ymm2                ; convert DWORD to REAL4
-        vaddps ymm2, ymm2, ymm8             ; ymm2 = rowNum + y
-        vmulps ymm2, ymm2, ymm1             ; ymm2 = (rowNum + y) * scaleY
-        vaddps ymm2, ymm2, ymm9             ; Im(C) - ymm2 = (rowNum + y) * yScale + yStart
+        movd xmm3, r10d                     ; moving current Y as scalar to xmm3
+        vbroadcastss ymm3, xmm3             ; broadcasting Y to ymm3
+        vcvtdq2ps ymm3, ymm3                ; convert DWORD to REAL4
+        vaddps ymm3, ymm3, ymm8             ; ymm3 = rowNum + y
+        vmulps ymm3, ymm3, ymm1             ; ymm3 = (rowNum + y) * scaleY
+        vaddps ymm3, ymm3, ymm9             ; Im(C) - ymm3 = (rowNum + y) * yScale + yStart
 
         xor r11, r11                        ; current x of C - iterator
 
         LOOP_COLUMNS:
             ;--------- Calculating Re(C) ---------
-            movd xmm3, r11d                     ; moving current X as scalar to xmm3
-            vbroadcastss ymm3, xmm3             ; broadcasting X to ymm3
-            vcvtdq2ps ymm3, ymm3                ; convert DWORD to REAL4
-            vaddps ymm3, ymm3, ymm11            ; adding columnMask - makes every value greater than previous one by 1
-            vmulps ymm3, ymm3, ymm0             ; ymm3 = x * xScale
-            vaddps ymm3, ymm3, ymm10            ; Re(C) - ymm3 = x * xScale + xStart
+            movd xmm2, r11d                     ; moving current X as scalar to xmm2
+            vbroadcastss ymm2, xmm2             ; broadcasting X to ymm2
+            vcvtdq2ps ymm2, ymm2                ; convert DWORD to REAL4
+            vaddps ymm2, ymm2, ymm11            ; adding columnMask - makes every value greater than previous one by 1
+            vmulps ymm2, ymm2, ymm0             ; ymm2 = x * xScale
+            vaddps ymm2, ymm2, ymm10            ; Re(C) - ymm2 = x * xScale + xStart
+
+            xor rcx, rcx                        ; current Z(n) iteration - iterator
+            vmovups ymm4, ymm2                  ; ymm4 - Re(Z1) = Re(C)
+            vmovups ymm6, ymm3                  ; ymm6 - Im(Z1) = Im(C)
+
+            LOOP_ITERATIONS:
+                ;--------- Re(Zn+1) = Re^2(Zn) - Im^2(Zn) + Re(C) ---------
+                vmovups ymm5, ymm4
+                vmulps ymm5, ymm5, ymm5
+                vmovups ymm7, ymm6
+                vmulps ymm7, ymm7, ymm7
+                vsubps ymm5, ymm5, ymm7
+                vaddps ymm5, ymm5, ymm2             ; ymm5 - Re(Zn+1)
+
+                ;--------- Im(Zn+1) = 2 * Re(Zn) * Im(Zn) + Im(C) ---------
+                vbroadcastss ymm7, dword ptr [TWO]
+                vmulps ymm7, ymm7, ymm4
+                vmulps ymm7, ymm7, ymm6
+                vaddps ymm7, ymm7, ymm3             ; ymm7 - Im(Zn+1)
+
+                vmovups ymm4, ymm5                  ; Re(Zn) new value
+                vmovups ymm6, ymm7                  ; Im(Zn) new value
+
+                inc ecx
+                cmp ecx, [rbp + 64]                 ; compare current iteration number with iterCount
+                jl LOOP_ITERATIONS
+
+            ;--------- Checking if number is a part of Mandelbrot Set ---------
+            vmulps ymm4, ymm4, ymm4             ; Re^2(Zn)
+            vmulps ymm6, ymm6, ymm6             ; Im^2(Zn)
+            vaddps ymm4, ymm4, ymm6             ; Re^2(Zn) + Im^2(Zn)
+            vbroadcastss ymm5, dword ptr [FOUR] ; broadcasts 4 to ymm5
+            vcmpleps ymm5, ymm4, ymm5           ; |Zn|^2 <= 4
 
 
             add r11d, 8
