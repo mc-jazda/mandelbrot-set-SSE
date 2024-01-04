@@ -19,11 +19,12 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
 
     LOCAL alignment: QWORD
     LOCAL rowCount: DWORD
+    LOCAL pixelColors [8]: DWORD 
     
     ;--------- Prologue ---------
     push rsp
     mov rsp, rbp
-    sub rsp, 16                         ; subtracting number of locals * 8 bytes
+    sub rsp, 80                         ; subtracting number of locals * 8 bytes
     
     mov r11, [rbp + 56]
     mov alignment, r11
@@ -45,7 +46,7 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
     movd xmm1, r9d                      ; moving resX as scalar to xmm1
     vbroadcastss ymm1, xmm1             ; broadcasting resX to ymm1
     vcvtdq2ps ymm1, ymm1                ; convert DWORD to REAL4
-    vdivps ymm0, ymm0, ymm1             ; Scale X - ymm0 = abs(x_end - x_start) / resX
+    vdivps ymm0, ymm0, ymm1             ; Scale X: ymm0 = abs(x_end - x_start) / resX
 
     ; Y scale factor
     vbroadcastss ymm1, dword ptr [y_end]
@@ -61,6 +62,7 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
     xor r10, r10                        ; current y of C - iterator
     movd xmm8, r8d                      ; moving rowNum as scalar to xmm8
     vbroadcastss ymm8, xmm8             ; broadcasting rowNum to ymm8
+    vcvtdq2ps ymm8, ymm8
     vbroadcastss ymm9, dword ptr [y_start]  ; broadcasting y_start to ymm9
     vbroadcastss ymm10, dword ptr [x_start] ; broadcasting x_start to ymm10
     vmovdqu ymm11, ymmword ptr [columnMask] ; load 0, 1, 2, 3, 4, 5, 6, 7 to ymm11 - needed for calculating Re(C)
@@ -125,15 +127,17 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
 
             ;--------- Coding bitmap pixels ---------
             xor rcx, rcx                        ; current pixel - iterator
+            lea rdi, pixelColors
+            vmovdqu ymmword ptr [rdi], ymm5
 
             LOOP_PIXELS:
-                vmovd edx, xmm5
-                vpsrldq ymm5, ymm5, 4
+                mov dl, byte ptr [rdi]
                 mov byte ptr [rsi], dl
                 mov byte ptr [rsi+1], dl
                 mov byte ptr [rsi+2], dl
+                
+                add rdi, 4
                 add rsi, 3
-
                 inc ecx
                 cmp ecx, 8
                 jl LOOP_PIXELS
@@ -146,25 +150,6 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
         inc r10d
         cmp r10d, rowCount
         jl LOOP_ROWS
-
-
-    ;--------- Making bitmap image grey ---------
-    ;mov r10b, 120  ; value to set every pixel to ??? is it neccessary ???
-    ;xor rcx, rcx   ; iterator for inner loop
-    ;xor rdi, rdi   ; iterator for outer loop
-    ;
-    ;OUTER_LOOP:
-    ;    INNER_LOOP:
-    ;        mov byte ptr [rsi], r10b
-    ;        inc rsi
-    ;        inc rcx
-    ;        cmp ecx, eax
-    ;        jl INNER_LOOP
-    ;xor rcx, rcx
-    ;add rsi, alignment
-    ;inc rdi
-    ;cmp rdi, rowCount
-    ;jl OUTER_LOOP
     
     
     ;--------- Epilogue ---------
