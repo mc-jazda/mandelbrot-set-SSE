@@ -26,8 +26,8 @@ void generateMandelCpp(BYTE* bmp, int rowCount, int rowNum, int resX, int resY, 
 
             bool isInSet = true;    // Checks if current C is part of Mandelbrot Set
 
-            // Calculates next values of Z(n) 
-            // And cheks if |Z(n)| < 2, then C is part of Mandlebrot Set
+            // Calculates next value of Z(n) 
+            // And checks if |Z(n)| =< 2, then C is part of Mandlebrot Set
             for (int i = 0; i < iterCount; i++)
             {
                 float z2Re = zRe * zRe - zIm * zIm + cRe;
