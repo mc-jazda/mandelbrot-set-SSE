@@ -20,14 +20,13 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
     LOCAL alignment: QWORD
     LOCAL rowCount: DWORD
     LOCAL pixelColors [8]: DWORD 
-    
+
     ;--------- Prologue ---------
-    ;push rsp
-    ;push rsi
-    ;push rdi
-    mov rsp, rbp
-    ;sub rsp, 80                         ; subtracting number of locals * 8 bytes
+    mov qword ptr [rbp+16], rsp
+    mov qword ptr [rbp+24], rsi
+    mov qword ptr [rbp+32], rdi
     
+
     mov r11, [rbp + 56]
     mov alignment, r11
 
@@ -159,11 +158,9 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
     
     
     ;--------- Epilogue ---------
-    mov rsp, rbp  ; deallocating local data
-    ;pop rdi
-    ;pop rsi
-    ;pop rcx
-    ;pop rsp
+    mov rsp, qword ptr [rbp+16]
+    mov rsi, qword ptr [rbp+24]
+    mov rdi, qword ptr [rbp+32]
     
 
     ret
