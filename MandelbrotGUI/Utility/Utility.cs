@@ -9,15 +9,19 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
+
 namespace MandelbrotGUI.Utility
 {
     static public class Utility
     {
-        // Need to change to /release path
-        // and turn on optimization in cpp and masm dlls
+#if DEBUG
         private const string cppDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Debug\MandelbrotCpp.dll";
         private const string masmDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Debug\MandelbrotMASM.dll";
-
+#endif
+#if RELEASE
+        private const string cppDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Release\MandelbrotCpp.dll";
+        private const string masmDllPath = @"C:\Users\kgazd\source\repos\MandelbrotSet\x64\Release\MandelbrotMASM.dll";
+#endif
         [DllImport(cppDllPath)]
         private static extern void generateMandelCpp(
             byte[] bmp, int rowCount, int rowNum, int resX, int resY, int alignment, int iterCount);
