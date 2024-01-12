@@ -22,9 +22,11 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
     LOCAL pixelColors [8]: DWORD 
     
     ;--------- Prologue ---------
-    push rsp
+    ;push rsp
+    ;push rsi
+    ;push rdi
     mov rsp, rbp
-    sub rsp, 80                         ; subtracting number of locals * 8 bytes
+    ;sub rsp, 80                         ; subtracting number of locals * 8 bytes
     
     mov r11, [rbp + 56]
     mov alignment, r11
@@ -111,26 +113,30 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
                 vmovups ymm4, ymm5                  ; Re(Zn) new value
                 vmovups ymm6, ymm7                  ; Im(Zn) new value
 
+                ;--------- Checking if number is a part of Mandelbrot Set ---------
+                vmulps ymm5, ymm5, ymm5             ; Re^2(Zn)
+                vmulps ymm7, ymm7, ymm7             ; Im^2(Zn)
+                vaddps ymm5, ymm5, ymm7             ; Re^2(Zn) + Im^2(Zn)
+                vbroadcastss ymm12, dword ptr [FOUR] ; broadcasts 4 to ymm12
+                vcmpleps ymm12, ymm5, ymm12         ; |Zn|^2 <= 4
+                vmovmskps rdi, ymm12                ; moves sign bits to rdi
+                cmp rdi, 0                          ; if all sign bits in ymm12 are 0 then all floats are greater than 4
+                je SAVE_PIXELS                      ; early bailout 
+
                 inc ecx
                 cmp ecx, [rbp + 64]                 ; compare current iteration number with iterCount
                 jl LOOP_ITERATIONS
 
-            ;--------- Checking if number is a part of Mandelbrot Set ---------
-            vmulps ymm4, ymm4, ymm4             ; Re^2(Zn)
-            vmulps ymm6, ymm6, ymm6             ; Im^2(Zn)
-            vaddps ymm4, ymm4, ymm6             ; Re^2(Zn) + Im^2(Zn)
-            vbroadcastss ymm5, dword ptr [FOUR] ; broadcasts 4 to ymm5
-            vcmpleps ymm5, ymm4, ymm5           ; |Zn|^2 <= 4
-
+            SAVE_PIXELS: 
             vbroadcastss ymm4, dword ptr [WHITE] ; broadcast ymm4 with RGB white
-            vandps ymm5, ymm5, ymm4             ; ymm5 contains either black or white RGB value
+            vandps ymm12, ymm12, ymm4            ; ymm12 contains either black or white RGB value
 
             ;--------- Coding bitmap pixels ---------
-            xor rcx, rcx                        ; current pixel - iterator
+            xor rcx, rcx                         ; current pixel - iterator
             lea rdi, pixelColors
-            vmovdqu ymmword ptr [rdi], ymm5
+            vmovdqu ymmword ptr [rdi], ymm12     ; move content of ymm12 to array on stack for quicker iterating
 
-            LOOP_PIXELS:
+            LOOP_PIXELS:                         ; save values of pixels in bitmap
                 mov dl, byte ptr [rdi]
                 mov byte ptr [rsi], dl
                 mov byte ptr [rsi+1], dl
@@ -146,7 +152,7 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
             cmp r11d, r9d
             jl LOOP_COLUMNS
 
-        add rsi, alignment
+        add rsi, alignment          ; add alignment for 24bbp bitmap
         inc r10d
         cmp r10d, rowCount
         jl LOOP_ROWS
@@ -154,7 +160,11 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
     
     ;--------- Epilogue ---------
     mov rsp, rbp  ; deallocating local data
-    pop rsp
+    ;pop rdi
+    ;pop rsi
+    ;pop rcx
+    ;pop rsp
+    
 
     ret
 generateMandelMASM endp
