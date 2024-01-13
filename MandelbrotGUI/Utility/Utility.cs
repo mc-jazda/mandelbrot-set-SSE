@@ -1,14 +1,6 @@
-﻿using MandelbrotGUI.Properties;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Resources;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-
 
 namespace MandelbrotGUI.Utility
 {

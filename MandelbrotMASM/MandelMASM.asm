@@ -1,7 +1,3 @@
-;includelib \masm32\lib\msvcrt.lib
-;includelib \masm32\lib\user32.lib
-;includelib \masm32\lib\kernel32.lib
-
 .data
     x_start REAL4 -2.2
     x_end REAL4 0.8
