@@ -1,4 +1,5 @@
 using MandelbrotGUI.Utility;
+using System.Windows.Forms;
 
 namespace MandelbrotGUI
 {
@@ -49,6 +50,14 @@ namespace MandelbrotGUI
 
             Bitmap bitmap = Utility.Utility.initMandel(settings);
             pictureBoxBmp.Image = bitmap;
+        }
+
+        private void settingResX_ValueChanged(object sender, EventArgs e)
+        {
+            int value = (int)settingResX.Value;
+
+            if (value % 8 != 0)
+                settingResX.Value = (value / 8) * 8;
         }
     }
 }

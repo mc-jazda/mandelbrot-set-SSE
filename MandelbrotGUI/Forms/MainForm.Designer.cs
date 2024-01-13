@@ -45,7 +45,8 @@ namespace MandelbrotGUI
             labelResY = new Label();
             buttonConfirm = new Button();
             pictureBoxBmp = new PictureBox();
-            separator = new Label();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            mainLayout = new TableLayoutPanel();
             groupDll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)settingResX).BeginInit();
             groupSettings.SuspendLayout();
@@ -53,17 +54,23 @@ namespace MandelbrotGUI
             ((System.ComponentModel.ISupportInitialize)settingIterationCount).BeginInit();
             ((System.ComponentModel.ISupportInitialize)settingResY).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBmp).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
+            mainLayout.SuspendLayout();
             SuspendLayout();
             // 
             // labelTitle
             // 
             labelTitle.AutoSize = true;
-            labelTitle.Font = new Font("Segoe UI Black", 20F, FontStyle.Bold, GraphicsUnit.Point);
-            labelTitle.Location = new Point(32, 20);
+            labelTitle.BackColor = Color.Transparent;
+            labelTitle.Dock = DockStyle.Fill;
+            labelTitle.Font = new Font("Bauhaus 93", 30F, FontStyle.Regular, GraphicsUnit.Point);
+            labelTitle.ForeColor = Color.White;
+            labelTitle.ImageAlign = ContentAlignment.BottomCenter;
+            labelTitle.Location = new Point(400, 0);
             labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(337, 46);
+            labelTitle.Size = new Size(979, 67);
             labelTitle.TabIndex = 0;
-            labelTitle.Text = "Zbiór Mandelbrota";
+            labelTitle.Text = "Generowanie zbioru Mandelbrota";
             labelTitle.Click += label1_Click;
             // 
             // radioBtnMASM
@@ -92,22 +99,25 @@ namespace MandelbrotGUI
             // 
             groupDll.Controls.Add(radioBtnMASM);
             groupDll.Controls.Add(radioBtnCpp);
-            groupDll.Location = new Point(32, 89);
+            groupDll.ForeColor = Color.White;
+            groupDll.Location = new Point(3, 249);
             groupDll.Name = "groupDll";
-            groupDll.Size = new Size(147, 95);
+            groupDll.Size = new Size(192, 99);
             groupDll.TabIndex = 3;
             groupDll.TabStop = false;
             groupDll.Text = "Wybierz funkcję:";
             // 
             // settingResX
             // 
+            settingResX.Increment = new decimal(new int[] { 8, 0, 0, 0 });
             settingResX.Location = new Point(189, 33);
             settingResX.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
-            settingResX.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            settingResX.Minimum = new decimal(new int[] { 8, 0, 0, 0 });
             settingResX.Name = "settingResX";
             settingResX.Size = new Size(90, 27);
             settingResX.TabIndex = 4;
-            settingResX.Value = new decimal(new int[] { 300, 0, 0, 0 });
+            settingResX.Value = new decimal(new int[] { 1000, 0, 0, 0 });
+            settingResX.ValueChanged += settingResX_ValueChanged;
             // 
             // groupSettings
             // 
@@ -119,9 +129,10 @@ namespace MandelbrotGUI
             groupSettings.Controls.Add(settingResX);
             groupSettings.Controls.Add(labelResX);
             groupSettings.Controls.Add(labelResY);
-            groupSettings.Location = new Point(32, 227);
+            groupSettings.ForeColor = Color.White;
+            groupSettings.Location = new Point(3, 3);
             groupSettings.Name = "groupSettings";
-            groupSettings.Size = new Size(306, 182);
+            groupSettings.Size = new Size(305, 179);
             groupSettings.TabIndex = 5;
             groupSettings.TabStop = false;
             groupSettings.Text = "Dostosuj ustawienia:";
@@ -149,7 +160,7 @@ namespace MandelbrotGUI
             // settingIterationCount
             // 
             settingIterationCount.Location = new Point(189, 99);
-            settingIterationCount.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            settingIterationCount.Maximum = new decimal(new int[] { 30000, 0, 0, 0 });
             settingIterationCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             settingIterationCount.Name = "settingIterationCount";
             settingIterationCount.Size = new Size(90, 27);
@@ -173,7 +184,7 @@ namespace MandelbrotGUI
             settingResY.Name = "settingResY";
             settingResY.Size = new Size(90, 27);
             settingResY.TabIndex = 6;
-            settingResY.Value = new decimal(new int[] { 300, 0, 0, 0 });
+            settingResY.Value = new decimal(new int[] { 1000, 0, 0, 0 });
             // 
             // labelResX
             // 
@@ -196,42 +207,71 @@ namespace MandelbrotGUI
             // 
             // buttonConfirm
             // 
-            buttonConfirm.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
-            buttonConfirm.Location = new Point(32, 459);
+            buttonConfirm.BackColor = Color.FromArgb(30, 30, 30);
+            buttonConfirm.Dock = DockStyle.Top;
+            buttonConfirm.Font = new Font("Berlin Sans FB Demi", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonConfirm.ForeColor = Color.White;
+            buttonConfirm.Location = new Point(3, 477);
             buttonConfirm.Name = "buttonConfirm";
-            buttonConfirm.Size = new Size(136, 53);
+            buttonConfirm.Size = new Size(385, 62);
             buttonConfirm.TabIndex = 6;
-            buttonConfirm.Text = "Zatwierdź";
-            buttonConfirm.UseVisualStyleBackColor = true;
+            buttonConfirm.Text = "GENERUJ";
+            buttonConfirm.UseVisualStyleBackColor = false;
             buttonConfirm.Click += buttonConfirm_Click;
             // 
             // pictureBoxBmp
             // 
-            pictureBoxBmp.Location = new Point(445, 40);
+            pictureBoxBmp.BackColor = Color.FromArgb(64, 64, 64);
+            pictureBoxBmp.Dock = DockStyle.Fill;
+            pictureBoxBmp.Location = new Point(400, 70);
             pictureBoxBmp.Name = "pictureBoxBmp";
-            pictureBoxBmp.Size = new Size(2000, 1000);
+            pictureBoxBmp.Size = new Size(979, 633);
+            pictureBoxBmp.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxBmp.TabIndex = 7;
             pictureBoxBmp.TabStop = false;
             // 
-            // separator
+            // tableLayoutPanel1
             // 
-            separator.BackColor = Color.Black;
-            separator.Location = new Point(397, 20);
-            separator.Name = "separator";
-            separator.Size = new Size(1, 940);
-            separator.TabIndex = 8;
+            tableLayoutPanel1.BackColor = Color.FromArgb(64, 64, 64);
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(groupDll, 0, 1);
+            tableLayoutPanel1.Controls.Add(buttonConfirm, 0, 2);
+            tableLayoutPanel1.Controls.Add(groupSettings, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(3, 70);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 51.90381F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 48.09619F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 158F));
+            tableLayoutPanel1.Size = new Size(391, 633);
+            tableLayoutPanel1.TabIndex = 8;
+            // 
+            // mainLayout
+            // 
+            mainLayout.BackColor = Color.FromArgb(32, 32, 32);
+            mainLayout.ColumnCount = 2;
+            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.7716312F));
+            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.22837F));
+            mainLayout.Controls.Add(tableLayoutPanel1, 0, 1);
+            mainLayout.Controls.Add(pictureBoxBmp, 1, 1);
+            mainLayout.Controls.Add(labelTitle, 1, 0);
+            mainLayout.Dock = DockStyle.Fill;
+            mainLayout.Location = new Point(0, 0);
+            mainLayout.Name = "mainLayout";
+            mainLayout.RowCount = 2;
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 9.490085F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 90.50992F));
+            mainLayout.Size = new Size(1382, 706);
+            mainLayout.TabIndex = 9;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1382, 1048);
-            Controls.Add(separator);
-            Controls.Add(pictureBoxBmp);
-            Controls.Add(buttonConfirm);
-            Controls.Add(groupSettings);
-            Controls.Add(groupDll);
-            Controls.Add(labelTitle);
+            ClientSize = new Size(1382, 706);
+            Controls.Add(mainLayout);
             Name = "MainForm";
             Text = "Form1";
             groupDll.ResumeLayout(false);
@@ -243,8 +283,10 @@ namespace MandelbrotGUI
             ((System.ComponentModel.ISupportInitialize)settingIterationCount).EndInit();
             ((System.ComponentModel.ISupportInitialize)settingResY).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBmp).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
+            mainLayout.ResumeLayout(false);
+            mainLayout.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -264,6 +306,7 @@ namespace MandelbrotGUI
         private NumericUpDown settingIterationCount;
         private Button buttonConfirm;
         private PictureBox pictureBoxBmp;
-        private Label separator;
+        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel mainLayout;
     }
 }
