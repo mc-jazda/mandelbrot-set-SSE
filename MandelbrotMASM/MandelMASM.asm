@@ -11,7 +11,9 @@
 
 .code
 
-generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, resY:DWORD, align:DWORD, iterCount:DWORD
+generateMandelMASM PROC 
+; bmp:QWORD, rowCount:DWORD, rowNum:DWORD
+; resX:DWORD, resY:DWORD, align:DWORD, iterCount:DWORD
 
     LOCAL alignment: QWORD
     LOCAL rowCount: DWORD
@@ -113,7 +115,7 @@ generateMandelMASM PROC ;bmp:QWORD, rowCount:DWORD, rowNum:DWORD, resX:DWORD, re
                 vmulps ymm7, ymm7, ymm7             ; Im^2(Zn)
                 vaddps ymm5, ymm5, ymm7             ; Re^2(Zn) + Im^2(Zn)
                 vbroadcastss ymm12, dword ptr [FOUR] ; broadcasts 4 to ymm12
-                vcmpleps ymm12, ymm5, ymm12         ; |Zn|^2 <= 4
+                vcmpltps ymm12, ymm5, ymm12         ; |Zn|^2 < 4
                 vmovmskps rdi, ymm12                ; moves sign bits to rdi
                 cmp rdi, 0                          ; if all sign bits in ymm12 are 0 then all floats are greater than 4
                 je SAVE_PIXELS                      ; early bailout 

@@ -63,8 +63,8 @@ namespace MandelbrotGUI
             labelTitle.AutoSize = true;
             labelTitle.BackColor = Color.Transparent;
             labelTitle.Dock = DockStyle.Fill;
-            labelTitle.Font = new Font("Bauhaus 93", 30F, FontStyle.Regular, GraphicsUnit.Point);
-            labelTitle.ForeColor = Color.White;
+            labelTitle.Font = new Font("Copperplate Gothic Light", 30F, FontStyle.Regular, GraphicsUnit.Point);
+            labelTitle.ForeColor = Color.Silver;
             labelTitle.ImageAlign = ContentAlignment.BottomCenter;
             labelTitle.Location = new Point(400, 0);
             labelTitle.Name = "labelTitle";
@@ -78,7 +78,7 @@ namespace MandelbrotGUI
             radioBtnMASM.AutoSize = true;
             radioBtnMASM.Location = new Point(30, 26);
             radioBtnMASM.Name = "radioBtnMASM";
-            radioBtnMASM.Size = new Size(74, 24);
+            radioBtnMASM.Size = new Size(82, 25);
             radioBtnMASM.TabIndex = 1;
             radioBtnMASM.TabStop = true;
             radioBtnMASM.Text = "MASM";
@@ -89,7 +89,7 @@ namespace MandelbrotGUI
             radioBtnCpp.AutoSize = true;
             radioBtnCpp.Location = new Point(30, 56);
             radioBtnCpp.Name = "radioBtnCpp";
-            radioBtnCpp.Size = new Size(59, 24);
+            radioBtnCpp.Size = new Size(64, 25);
             radioBtnCpp.TabIndex = 2;
             radioBtnCpp.TabStop = true;
             radioBtnCpp.Text = "C++";
@@ -99,7 +99,8 @@ namespace MandelbrotGUI
             // 
             groupDll.Controls.Add(radioBtnMASM);
             groupDll.Controls.Add(radioBtnCpp);
-            groupDll.ForeColor = Color.White;
+            groupDll.Font = new Font("Franklin Gothic Book", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            groupDll.ForeColor = Color.FromArgb(0, 0, 64);
             groupDll.Location = new Point(3, 249);
             groupDll.Name = "groupDll";
             groupDll.Size = new Size(192, 99);
@@ -109,6 +110,7 @@ namespace MandelbrotGUI
             // 
             // settingResX
             // 
+            settingResX.Font = new Font("Franklin Gothic Book", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             settingResX.Increment = new decimal(new int[] { 8, 0, 0, 0 });
             settingResX.Location = new Point(189, 33);
             settingResX.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
@@ -121,6 +123,7 @@ namespace MandelbrotGUI
             // 
             // groupSettings
             // 
+            groupSettings.BackColor = Color.SlateGray;
             groupSettings.Controls.Add(labelThreadNum);
             groupSettings.Controls.Add(settingThreadCount);
             groupSettings.Controls.Add(settingIterationCount);
@@ -129,7 +132,8 @@ namespace MandelbrotGUI
             groupSettings.Controls.Add(settingResX);
             groupSettings.Controls.Add(labelResX);
             groupSettings.Controls.Add(labelResY);
-            groupSettings.ForeColor = Color.White;
+            groupSettings.Font = new Font("Franklin Gothic Book", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            groupSettings.ForeColor = Color.FromArgb(0, 0, 64);
             groupSettings.Location = new Point(3, 3);
             groupSettings.Name = "groupSettings";
             groupSettings.Size = new Size(305, 179);
@@ -143,12 +147,13 @@ namespace MandelbrotGUI
             labelThreadNum.AutoSize = true;
             labelThreadNum.Location = new Point(29, 134);
             labelThreadNum.Name = "labelThreadNum";
-            labelThreadNum.Size = new Size(106, 20);
+            labelThreadNum.Size = new Size(126, 21);
             labelThreadNum.TabIndex = 11;
             labelThreadNum.Text = "Liczba wątków";
             // 
             // settingThreadCount
             // 
+            settingThreadCount.Font = new Font("Franklin Gothic Book", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             settingThreadCount.Location = new Point(189, 132);
             settingThreadCount.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             settingThreadCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -159,6 +164,7 @@ namespace MandelbrotGUI
             // 
             // settingIterationCount
             // 
+            settingIterationCount.Font = new Font("Franklin Gothic Book", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             settingIterationCount.Location = new Point(189, 99);
             settingIterationCount.Maximum = new decimal(new int[] { 30000, 0, 0, 0 });
             settingIterationCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -172,12 +178,13 @@ namespace MandelbrotGUI
             labelIterNum.AutoSize = true;
             labelIterNum.Location = new Point(29, 101);
             labelIterNum.Name = "labelIterNum";
-            labelIterNum.Size = new Size(100, 20);
+            labelIterNum.Size = new Size(123, 21);
             labelIterNum.TabIndex = 10;
             labelIterNum.Text = "Liczba iteracji";
             // 
             // settingResY
             // 
+            settingResY.Font = new Font("Franklin Gothic Book", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             settingResY.Location = new Point(189, 66);
             settingResY.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
             settingResY.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -191,7 +198,7 @@ namespace MandelbrotGUI
             labelResX.AutoSize = true;
             labelResX.Location = new Point(29, 35);
             labelResX.Name = "labelResX";
-            labelResX.Size = new Size(134, 20);
+            labelResX.Size = new Size(163, 21);
             labelResX.TabIndex = 5;
             labelResX.Text = "Szerokość bitmapy";
             labelResX.Click += label2_Click;
@@ -201,16 +208,16 @@ namespace MandelbrotGUI
             labelResY.AutoSize = true;
             labelResY.Location = new Point(29, 68);
             labelResY.Name = "labelResY";
-            labelResY.Size = new Size(133, 20);
+            labelResY.Size = new Size(159, 21);
             labelResY.TabIndex = 7;
             labelResY.Text = "Wysokość bitmapy";
             // 
             // buttonConfirm
             // 
-            buttonConfirm.BackColor = Color.FromArgb(30, 30, 30);
+            buttonConfirm.BackColor = Color.FromArgb(0, 0, 64);
             buttonConfirm.Dock = DockStyle.Top;
-            buttonConfirm.Font = new Font("Berlin Sans FB Demi", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            buttonConfirm.ForeColor = Color.White;
+            buttonConfirm.Font = new Font("Copperplate Gothic Light", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
+            buttonConfirm.ForeColor = Color.Silver;
             buttonConfirm.Location = new Point(3, 477);
             buttonConfirm.Name = "buttonConfirm";
             buttonConfirm.Size = new Size(385, 62);
@@ -221,7 +228,7 @@ namespace MandelbrotGUI
             // 
             // pictureBoxBmp
             // 
-            pictureBoxBmp.BackColor = Color.FromArgb(64, 64, 64);
+            pictureBoxBmp.BackColor = Color.Black;
             pictureBoxBmp.Dock = DockStyle.Fill;
             pictureBoxBmp.Location = new Point(400, 70);
             pictureBoxBmp.Name = "pictureBoxBmp";
@@ -232,7 +239,7 @@ namespace MandelbrotGUI
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.BackColor = Color.FromArgb(64, 64, 64);
+            tableLayoutPanel1.BackColor = Color.SlateGray;
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(groupDll, 0, 1);
@@ -250,7 +257,7 @@ namespace MandelbrotGUI
             // 
             // mainLayout
             // 
-            mainLayout.BackColor = Color.FromArgb(32, 32, 32);
+            mainLayout.BackColor = Color.FromArgb(0, 0, 64);
             mainLayout.ColumnCount = 2;
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.7716312F));
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.22837F));
@@ -273,7 +280,7 @@ namespace MandelbrotGUI
             ClientSize = new Size(1382, 706);
             Controls.Add(mainLayout);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "Mandelbrot";
             groupDll.ResumeLayout(false);
             groupDll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)settingResX).EndInit();
